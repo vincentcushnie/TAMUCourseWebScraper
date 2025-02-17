@@ -57,9 +57,9 @@ int main() {
                     for(pugi::xml_node node_3: node_2.child("table").children("tr")){
                         std::string nodeClass = std::string(node_3.attribute("class").value());
                         if(nodeClass=="plangridyear"){
-                            data.push_back("year");
+                            data.push_back(node_3.child("th").text().get());
                         }else if(nodeClass=="plangridterm"){
-                            data.push_back("season");
+                            data.push_back(node_3.child("th").text().get());
                         }else if(nodeClass=="odd" || nodeClass=="even"){
                             std::string codecol="empty";
                             std::string titlecol="empty";
@@ -67,7 +67,24 @@ int main() {
                             for(pugi::xml_node node_4: node_3.children("td")){
                                 if(std::string(node_4.attribute("class").value())=="codecol"){
                                     if(node_4.child("a")){
+                                        // Gets class code if there is a specific class
                                         codecol=node_4.child("a").text().get();
+                                    }
+                                    else if(node_4.child("span")){
+                                        // Sets titlecol as the name of an unspecific requirement
+                                        // Sets codecol to be the number of the footnote
+
+                                        // This extracts core curriculum
+                                        if(node_4.child("span").child("a")){
+                                            titlecol=node_4.child("span").child("a").text().get();
+                                            codecol=node_4.child("sup").text().get();
+                                        }
+                                        
+                                        // This extracts other electives
+                                        else{
+                                            titlecol=node_4.child("span").text().get();
+                                            codecol=node_4.child("sup").text().get();
+                                        }
                                     }
                                 }
                                 if(std::string(node_4.attribute("class").value())=="titlecol"){
