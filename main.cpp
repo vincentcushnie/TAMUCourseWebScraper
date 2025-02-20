@@ -13,20 +13,31 @@ size_t WriteCallback(void* contents, size_t size, size_t nmemb, void* userp) {
     return size * nmemb;
 }
 
-int main() {
+std::string trimUrl(const std::string& url) {
+    size_t lastSlash = url.find_last_of('/');
+    size_t secondLastSlash = url.find_last_of('/', lastSlash - 1);
+
+    if (secondLastSlash == std::string::npos || lastSlash == std::string::npos) {
+        return "invalid"; // Handle unexpected format
+    }
+
+    std::string trimmed = url.substr(secondLastSlash + 1, lastSlash - secondLastSlash - 1);
+    return trimmed;
+}
+
+void ScrapeDegree(std::string degreeUrl){
+    std::cout<<"degreeURL: "<<degreeUrl<<std::endl;
     CURL* curl = curl_easy_init();
     if (!curl) {
         std::cerr << "Failed to initialize CURL" << std::endl;
-        return 1;
     }
 
     std::ofstream file("raw.html", std::ios::out | std::ios::binary);
     if (!file) {
         std::cerr << "Failed to open raw.html" << std::endl;
-        return 1;
     }
 
-    curl_easy_setopt(curl, CURLOPT_URL, "https://catalog.tamu.edu/undergraduate/arts-and-sciences/mathematics/applied-mathematics-bs-computational-science-emphasis/#programrequirementstext");
+    curl_easy_setopt(curl, CURLOPT_URL, degreeUrl.c_str());
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &file);
     curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L); // Follow redirects
@@ -45,7 +56,6 @@ int main() {
     pugi::xml_document doc;
     if (!doc.load_file("cleaned.html")) {
         std::cerr << "Failed to load cleaned.html" << std::endl;
-        return 1;
     }
 
 
@@ -105,9 +115,9 @@ int main() {
         }
     }
 
-
     auto title = doc.child("html").child("head").child("title");
-    std::ofstream courseFile("courses.txt");
+    std::string filename = trimUrl(degreeUrl) + "-degree.txt";
+    std::ofstream courseFile(filename);
     for(std::string row: data){
         if(row.find("&nbsp;",0)!=std::string::npos){
             row.replace(row.find("&nbsp;",0), 6," ");
@@ -115,5 +125,73 @@ int main() {
         courseFile<<row<<std::endl;
     }
     courseFile.close();
+}
+
+
+void ScrapeCourses(std::string coursesUrl){
+    std::cout<<"degreeURL: "<<coursesUrl<<std::endl;
+    CURL* curl = curl_easy_init();
+    if (!curl) {
+        std::cerr << "Failed to initialize CURL" << std::endl;
+    }
+
+    std::ofstream file("raw.html", std::ios::out | std::ios::binary);
+    if (!file) {
+        std::cerr << "Failed to open raw.html" << std::endl;
+    }
+
+    curl_easy_setopt(curl, CURLOPT_URL, coursesUrl.c_str());
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &file);
+    curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L); // Follow redirects
+
+    CURLcode res = curl_easy_perform(curl);
+    if (res != CURLE_OK) {
+        std::cerr << "CURL error: " << curl_easy_strerror(res) << std::endl;
+    }
+
+    curl_easy_cleanup(curl);
+    file.close();
+    std::cout << "HTML saved to raw.html" << std::endl;
+    std::string command = "tidy -q -utf8 -asxml -o cleaned.html raw.html 2>/dev/null";
+    system(command.c_str());
+    std::cout << "Cleaned HTML saved to cleaned.html" << std::endl;
+    pugi::xml_document doc;
+    if (!doc.load_file("cleaned.html")) {
+        std::cerr << "Failed to load cleaned.html" << std::endl;
+    }
+
+
+    std::vector<std::string> data;
+    for (pugi::xpath_node xpath_node : doc.select_nodes("//div[@class='courseblock']")) {
+        pugi::xml_node div = xpath_node.node();  // Access the xml_node from xpath_node
+        data.push_back(div.child("h2").text().get());
+        data.push_back(div.child("p").child("span").child("strong").text().get());
+        data.push_back(div.child("p").text().get());
+        data.push_back(div.child("p").child("strong").text().get());
+    }
+
+    auto title = doc.child("html").child("head").child("title");
+    std::string filename = trimUrl(coursesUrl) + "-courses.txt";
+    std::ofstream courseFile(filename);
+    for(std::string row: data){
+        if(row.find("&nbsp;",0)!=std::string::npos){
+            row.replace(row.find("&nbsp;",0), 6," ");
+        }
+        size_t pos;
+        while ((pos = row.find("\n")) != std::string::npos) {
+            row.replace(pos, 1, " ");  // Replace the newline with a space
+        }
+        courseFile<<row<<std::endl;
+    }
+    courseFile.close();
+}
+
+
+int main() {
+    //ScrapeDegree("https://catalog.tamu.edu/undergraduate/arts-and-sciences/mathematics/applied-mathematics-bs-computational-science-emphasis/#programrequirementstext");
+    // ScrapeCourses("https://catalog.tamu.edu/undergraduate/course-descriptions/math/");
+    // ScrapeCourses("https://catalog.tamu.edu/undergraduate/engineering/computer-science/#coursestext");
     return 0;
 }
+
