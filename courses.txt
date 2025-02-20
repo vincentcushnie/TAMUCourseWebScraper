@@ -1,0 +1,195 @@
+First Year
+Fall
+not standard
+not standard
+titlecol: Composition and
+Rhetoric codecol: ENGL 104 hourscol: 3
+not standard
+not standard
+titlecol: Calculus I codecol: MATH 171 hourscol: 4
+not standard
+titlecol: University
+Core Curriculum codecol: 2 hourscol: 3
+not standard
+titlecol: Freshman Science elective codecol: 1 hourscol: 4
+not standard
+titlecol: General elective codecol: 3,4 hourscol: 1
+semester hours
+Spring
+not standard
+not standard
+titlecol: Principles of
+Economics codecol: ECON 202 hourscol: 3
+not standard
+not standard
+titlecol: Calculus II codecol: MATH 172 hourscol: 4
+not standard
+titlecol: University
+Core Curriculum codecol: 2 hourscol: 3
+not standard
+titlecol: Freshman Science elective codecol: 1 hourscol: 4
+not standard
+titlecol: General elective codecol: 3,4 hourscol: 1
+semester hours
+Second Year
+Fall
+not standard
+not standard
+titlecol: Several Variable
+Calculus codecol: MATH 221 hourscol: 4
+not standard
+not standard
+titlecol: Foundations of
+Mathematics codecol: MATH 300 hourscol: 3
+not standard
+not standard
+titlecol: Principles of
+Statistics I codecol: STAT 211 hourscol: 3
+not standard
+titlecol: Select one of the following: codecol:  hourscol: 4
+not standard
+not standard
+not standard
+not standard
+not standard
+not standard
+not standard
+not standard
+not standard
+semester hours
+Spring
+not standard
+not standard
+titlecol: Program Design and
+Concepts codecol: CSCE 120 hourscol: 3
+not standard
+not standard
+titlecol: Differential
+Equations codecol: MATH 308 hourscol: 3
+not standard
+not standard
+titlecol: Linear Algebra codecol: MATH 323 hourscol: 3
+not standard
+not standard
+titlecol: Principles of
+Statistics II codecol: STAT 212 hourscol: 3
+not standard
+titlecol: University
+Core Curriculum codecol: 2 hourscol: 3
+semester hours
+Third Year
+Fall
+not standard
+not standard
+titlecol: Data Structures and
+Algorithms codecol: CSCE 221 hourscol: 4
+not standard
+not standard
+titlecol: Analysis on the Real
+Line codecol: MATH 409 hourscol: 3
+not standard
+not standard
+titlecol: Newtonian Mechanics
+for Engineering and Science codecol: PHYS 206 hourscol: 4
+not standard
+titlecol: Select 3 hours from the
+following: codecol:  hourscol: 3
+not standard
+not standard
+not standard
+not standard
+not standard
+semester hours
+Spring
+not standard
+not standard
+titlecol: Programming
+Languages codecol: CSCE 314 hourscol: 3
+not standard
+not standard
+titlecol: Principles of
+Numerical Analysis codecol: MATH 437 hourscol: 4
+not standard
+titlecol: Select 3 hours from the
+following: codecol:  hourscol: 3
+not standard
+not standard
+not standard
+not standard
+not standard
+not standard
+titlecol: Select one of the following: codecol:  hourscol: 4
+not standard
+not standard
+not standard
+not standard
+not standard
+not standard
+semester hours
+Fourth Year
+Fall
+not standard
+not standard
+titlecol: Design and Analysis of
+Algorithms codecol: CSCE 411 hourscol: 3
+not standard
+not standard
+titlecol: Modern Algebra I codecol: MATH 415 hourscol: 3
+not standard
+titlecol: Select 3 hours from the
+following: codecol:  hourscol: 3
+not standard
+not standard
+not standard
+not standard
+not standard
+not standard
+titlecol: Select one of the following: codecol:  hourscol: 3
+not standard
+not standard
+not standard
+not standard
+not standard
+not standard
+not standard
+not standard
+not standard
+not standard
+titlecol: University
+Core Curriculum codecol: 2 hourscol: 3
+not standard
+titlecol: General Elective codecol: 4 hourscol: 1
+semester hours
+Spring
+not standard
+not standard
+titlecol: Formal Languages and
+Automata codecol: CSCE 433 hourscol: 3
+not standard
+titlecol: Select 3 hours from the
+following: codecol:  hourscol: 3
+not standard
+not standard
+not standard
+not standard
+not standard
+not standard
+not standard
+not standard
+not standard
+not standard
+not standard
+not standard
+not standard
+not standard
+not standard
+not standard
+titlecol: University
+Core Curriculum codecol: 2 hourscol: 3
+not standard
+titlecol: University
+Core Curriculum codecol: 2 hourscol: 3
+not standard
+titlecol: General elective codecol: 4 hourscol: 5
+semester hours
+total hours
