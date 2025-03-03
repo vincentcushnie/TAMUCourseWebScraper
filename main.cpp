@@ -128,8 +128,47 @@ void ScrapeDegree(std::string degreeUrl){
 }
 
 
+
+void prerequisiteProcess(std::ofstream& prereqTable, std::string row){
+    size_t prerequisitesPos = row.find("Prerequisite:");
+    if(prerequisitesPos!=std::string::npos){
+        row=row.substr(prerequisitesPos+13);
+    }
+    prerequisitesPos = row.find("Prerequisites:");
+    if(prerequisitesPos!=std::string::npos){
+        row=row.substr(prerequisitesPos+14);
+    }
+    size_t crossListingPos = row.find("Cross Listing");
+    if (crossListingPos != std::string::npos) {
+        row = row.substr(0, crossListingPos); 
+    }
+    
+    std::vector<std::string> splitStrings;
+    size_t start = 0;
+    size_t end = row.find(';');
+    
+    while (end != std::string::npos) {
+        splitStrings.push_back(row.substr(start, end - start));
+        prereqTable<<row.substr(start, end-start)<<std::endl;
+        start = end + 1;
+        end = row.find(';', start);
+        
+    }
+    splitStrings.push_back(row.substr(start));
+    prereqTable<<row.substr(start)<<std::endl;
+
+
+}
+void crossListingProcess(std::ofstream& crossListingTable, std::string row){
+
+}
+
+
+
+
+
 void ScrapeCourses(std::string coursesUrl){
-    std::cout<<"degreeURL: "<<coursesUrl<<std::endl;
+    std::cout<<"coursesUrl: "<<coursesUrl<<std::endl;
     CURL* curl = curl_easy_init();
     if (!curl) {
         std::cerr << "Failed to initialize CURL" << std::endl;
@@ -168,30 +207,80 @@ void ScrapeCourses(std::string coursesUrl){
         data.push_back(div.child("h2").text().get());
         data.push_back(div.child("p").child("span").child("strong").text().get());
         data.push_back(div.child("p").text().get());
-        data.push_back(div.child("p").child("strong").text().get());
+        //data.push_back(div.child("p").child("strong").text().get());
+        std::string fulltext=div.child("p").child("strong").text().get();
+        pugi::xml_node temp = div.child("p").child("strong").next_sibling();
+        while(temp){
+            fulltext+=temp.text().get();
+            temp=temp.next_sibling();
+        }
+        //std::cout<<fulltext<<std::endl;
+        data.push_back(fulltext);
+
+    
     }
 
     auto title = doc.child("html").child("head").child("title");
-    std::string filename = trimUrl(coursesUrl) + "-courses.txt";
-    std::ofstream courseFile(filename);
+    std::string trimmedUrl = trimUrl(coursesUrl);
+    std::string filename = trimmedUrl + "-courses.txt";
+    std::ofstream courseTable(trimmedUrl + "CourseTable.csv");
+    std::ofstream prereqTable(trimmedUrl + "PrereqTable.csv");
+    std::ofstream crossListingTable(trimmedUrl + "CrossListingTable.csv");
+    courseTable<<"Course Code, Course Name, Field, Credits, Lecture, Lab, Description, Difficulty"<<std::endl;
+    prereqTable<<"Course Code, Course Code"<<std::endl;
+    crossListingTable<<"Course Code, Course Code"<<std::endl;
     for(std::string row: data){
-        if(row.find("&nbsp;",0)!=std::string::npos){
-            row.replace(row.find("&nbsp;",0), 6," ");
+        while(row.find("&nbsp;")!=std::string::npos){
+            row.replace(row.find("&nbsp;"), 6,"");
         }
         size_t pos;
         while ((pos = row.find("\n")) != std::string::npos) {
             row.replace(pos, 1, " ");  // Replace the newline with a space
         }
-        courseFile<<row<<std::endl;
+        if(row.length()<8 || row.substr(0,5)=="Prere" || row.substr(0,5)=="Cross"){
+            //prereqTable<<row<<std::endl;
+           if(row.find("Prerequisite")!=std::string::npos){
+                prerequisiteProcess(prereqTable, row);
+           }
+           if(row.find("Cross Listing")!=std::string::npos){
+                crossListingProcess(crossListingTable, row);
+           }
+        }
+        else if(isdigit(row[4]) && isdigit(row[5]) && isdigit(row[6])){
+            courseTable<<row.substr(0,7)<<","<<row.substr(8)<<","<<row.substr(0,4)<<",";
+        }
+        else if(row.substr(0,6)=="Credit"){
+            if(row.substr(0,7)=="Credits"){
+                courseTable<<row.substr(8,1)<<",";
+            }
+            else{
+                courseTable<<row.substr(7,1)<<",";
+            }
+            if(row.find("Lecture Hour")!=std::string::npos){
+                courseTable<<row.substr(row.find("Lecture Hour")-2,1)<<",";
+            }
+            else{
+                courseTable<<0<<",";
+            }
+            if(row.find("Lab Hour")!=std::string::npos){
+                courseTable<<row.substr(row.find("Lab Hour")-2,1)<<",";
+            }else{
+                courseTable<<0<<",";
+            }
+        }
+        else if(row.length()>3){
+            courseTable<<row.substr(1)<<","<<0<<std::endl;
+        }
     }
-    courseFile.close();
+    courseTable.close();
+    prereqTable.close();
+    crossListingTable.close();
 }
 
 
 int main() {
     //ScrapeDegree("https://catalog.tamu.edu/undergraduate/arts-and-sciences/mathematics/applied-mathematics-bs-computational-science-emphasis/#programrequirementstext");
-    // ScrapeCourses("https://catalog.tamu.edu/undergraduate/course-descriptions/math/");
-    // ScrapeCourses("https://catalog.tamu.edu/undergraduate/engineering/computer-science/#coursestext");
+    ScrapeCourses("https://catalog.tamu.edu/undergraduate/course-descriptions/math/");
+    ScrapeCourses("https://catalog.tamu.edu/undergraduate/engineering/computer-science/#coursestext");
     return 0;
 }
-
