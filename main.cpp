@@ -5,6 +5,7 @@
 #include <fstream>
 #include <curl/curl.h>
 #include <vector>
+#include <regex>
 #include <string.h>
 
 size_t WriteCallback(void* contents, size_t size, size_t nmemb, void* userp) {
@@ -23,6 +24,19 @@ std::string trimUrl(const std::string& url) {
 
     std::string trimmed = url.substr(secondLastSlash + 1, lastSlash - secondLastSlash - 1);
     return trimmed;
+}
+
+std::vector<std::string> extractCodes(const std::string &text) {
+    std::regex pattern(R"([A-Z]{4}\d{3})"); // Matches four capital letters followed by three digits
+    std::vector<std::string> matches;
+    std::sregex_iterator it(text.begin(), text.end(), pattern);
+    std::sregex_iterator end;
+
+    while (it != end) {
+        matches.push_back(it->str());
+        ++it;
+    }
+    return matches;
 }
 
 void ScrapeDegree(std::string degreeUrl){
@@ -129,7 +143,7 @@ void ScrapeDegree(std::string degreeUrl){
 
 
 
-void prerequisiteProcess(std::ofstream& prereqTable, std::string row){
+void prerequisiteProcess(std::ofstream& prereqTable, std::string row, std::string currentCourse){
     size_t prerequisitesPos = row.find("Prerequisite:");
     if(prerequisitesPos!=std::string::npos){
         row=row.substr(prerequisitesPos+13);
@@ -149,13 +163,37 @@ void prerequisiteProcess(std::ofstream& prereqTable, std::string row){
     
     while (end != std::string::npos) {
         splitStrings.push_back(row.substr(start, end - start));
-        prereqTable<<row.substr(start, end-start)<<std::endl;
         start = end + 1;
         end = row.find(';', start);
         
     }
     splitStrings.push_back(row.substr(start));
-    prereqTable<<row.substr(start)<<std::endl;
+    
+    for(std::string requirement: splitStrings){
+        const std::string phrase = "also taught at";
+        if (requirement.size() >= phrase.size() && requirement.find(phrase) != std::string::npos) {
+            requirement.erase(requirement.find(phrase));
+        }
+
+        
+
+        if(requirement!=" "){
+            std::regex pattern(R"((Grade|grade) of ([A-Z]) or better\s*)");
+            std::smatch match;
+            std::string gradeReq="";
+
+            if (std::regex_search(requirement, match, pattern)) {
+                gradeReq = match[2].str(); // Store the letter grade
+                requirement = std::regex_replace(requirement, pattern, ""); // Remove the phrase
+            }
+
+            // std::vector<std::string> testing = extractCodes(requirement);
+            // for(std::string a : testing){
+            //     prereqTable<<currentCourse<<","<<a<<std::endl;
+            // }
+            prereqTable<<currentCourse<<": "<<requirement<<std::endl;
+        }
+    }
 
 
 }
@@ -168,33 +206,33 @@ void crossListingProcess(std::ofstream& crossListingTable, std::string row){
 
 
 void ScrapeCourses(std::string coursesUrl){
-    std::cout<<"coursesUrl: "<<coursesUrl<<std::endl;
-    CURL* curl = curl_easy_init();
-    if (!curl) {
-        std::cerr << "Failed to initialize CURL" << std::endl;
-    }
+    // std::cout<<"coursesUrl: "<<coursesUrl<<std::endl;
+    // CURL* curl = curl_easy_init();
+    // if (!curl) {
+    //     std::cerr << "Failed to initialize CURL" << std::endl;
+    // }
 
-    std::ofstream file("raw.html", std::ios::out | std::ios::binary);
-    if (!file) {
-        std::cerr << "Failed to open raw.html" << std::endl;
-    }
+    // std::ofstream file("raw.html", std::ios::out | std::ios::binary);
+    // if (!file) {
+    //     std::cerr << "Failed to open raw.html" << std::endl;
+    // }
 
-    curl_easy_setopt(curl, CURLOPT_URL, coursesUrl.c_str());
-    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
-    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &file);
-    curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L); // Follow redirects
+    // curl_easy_setopt(curl, CURLOPT_URL, coursesUrl.c_str());
+    // curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+    // curl_easy_setopt(curl, CURLOPT_WRITEDATA, &file);
+    // curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L); // Follow redirects
 
-    CURLcode res = curl_easy_perform(curl);
-    if (res != CURLE_OK) {
-        std::cerr << "CURL error: " << curl_easy_strerror(res) << std::endl;
-    }
+    // CURLcode res = curl_easy_perform(curl);
+    // if (res != CURLE_OK) {
+    //     std::cerr << "CURL error: " << curl_easy_strerror(res) << std::endl;
+    // }
 
-    curl_easy_cleanup(curl);
-    file.close();
-    std::cout << "HTML saved to raw.html" << std::endl;
-    std::string command = "tidy -q -utf8 -asxml -o cleaned.html raw.html 2>/dev/null";
-    system(command.c_str());
-    std::cout << "Cleaned HTML saved to cleaned.html" << std::endl;
+    // curl_easy_cleanup(curl);
+    // file.close();
+    // std::cout << "HTML saved to raw.html" << std::endl;
+    // std::string command = "tidy -q -utf8 -asxml -o cleaned.html raw.html 2>/dev/null";
+    // system(command.c_str());
+    // std::cout << "Cleaned HTML saved to cleaned.html" << std::endl;
     pugi::xml_document doc;
     if (!doc.load_file("cleaned.html")) {
         std::cerr << "Failed to load cleaned.html" << std::endl;
@@ -227,8 +265,9 @@ void ScrapeCourses(std::string coursesUrl){
     std::ofstream prereqTable(trimmedUrl + "PrereqTable.csv");
     std::ofstream crossListingTable(trimmedUrl + "CrossListingTable.csv");
     courseTable<<"Course Code, Course Name, Field, Credits, Lecture, Lab, Description, Difficulty"<<std::endl;
-    prereqTable<<"Course Code, Course Code"<<std::endl;
+    prereqTable<<"Course Code, Course Code, Grade Req"<<std::endl;
     crossListingTable<<"Course Code, Course Code"<<std::endl;
+    std::string currentCourse="";
     for(std::string row: data){
         while(row.find("&nbsp;")!=std::string::npos){
             row.replace(row.find("&nbsp;"), 6,"");
@@ -240,7 +279,7 @@ void ScrapeCourses(std::string coursesUrl){
         if(row.length()<8 || row.substr(0,5)=="Prere" || row.substr(0,5)=="Cross"){
             //prereqTable<<row<<std::endl;
            if(row.find("Prerequisite")!=std::string::npos){
-                prerequisiteProcess(prereqTable, row);
+                prerequisiteProcess(prereqTable, row, currentCourse);
            }
            if(row.find("Cross Listing")!=std::string::npos){
                 crossListingProcess(crossListingTable, row);
@@ -248,6 +287,7 @@ void ScrapeCourses(std::string coursesUrl){
         }
         else if(isdigit(row[4]) && isdigit(row[5]) && isdigit(row[6])){
             courseTable<<row.substr(0,7)<<","<<row.substr(8)<<","<<row.substr(0,4)<<",";
+            currentCourse=row.substr(0,7);
         }
         else if(row.substr(0,6)=="Credit"){
             if(row.substr(0,7)=="Credits"){
