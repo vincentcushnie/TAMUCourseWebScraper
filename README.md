@@ -18,3 +18,14 @@ After execution, you should have the following files:
     cleaned.html: holds the tidy xml formatted version of the raw.html
     courses.txt: holds the parsed information
 
+
+
+TODO:
+
+Degrees:
+    Pretty much everything
+
+Courses:
+    Correct credits to work with classes that say something like "1 to 3"
+    Known incorrect courses:
+        -Math 170 concurrency clause
