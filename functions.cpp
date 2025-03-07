@@ -266,3 +266,12 @@ void Functions::crossListingProcess(std::ofstream& crossListingTable, std::strin
         }
     }
 }
+
+
+void Functions::removeNewlines(std::string& input) {
+    for (char& c : input) {
+        if (c == '\n' || c == '\r') {
+            c = ' ';
+        }
+    }
+}

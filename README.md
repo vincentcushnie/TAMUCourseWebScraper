@@ -10,7 +10,7 @@ tidy - (wsl ubuntu) sudo apt update
 curl - (wsl ubutnu) sudo apt update
                     sudo apt install curl
 
-Compile with: $ g++ main.cpp -lpugixml -lcurl -ltidy
+Compile with: $ g++ main.cpp Functions.cpp -lpugixml -lcurl -ltidy
 Run with: ./a.out
 
 After execution, you should have the following files:
@@ -23,7 +23,8 @@ After execution, you should have the following files:
 TODO:
 
 Degrees:
-    Pretty much everything
+    Consider superscript notes
+    Extract degree general data
 
 Courses:
     Correct credits to work with classes that say something like "1 to 3"

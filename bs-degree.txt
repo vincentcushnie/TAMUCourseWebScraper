@@ -1,0 +1,59 @@
+year
+season
+not standardCHEM 107emptyempty
+not standardCHEM 107General Chemistry for
+Engineering Students empty
+titlecol: General Chemistry for
+Engineering Students  codecol: CHEM 107 hourscol: 3
+not standardCHEM 117emptyempty
+not standardCHEM 117General Chemistry for
+Engineering Students Laboratory empty
+titlecol: General Chemistry for
+Engineering Students Laboratory  codecol: CHEM 117 hourscol: 1
+not standardENGL 103emptyempty
+not standardENGL 103Introduction to
+Rhetoric and Composition empty
+titlecol: Introduction to
+Rhetoric and Composition  codecol: ENGL 103 hourscol: 3
+not standardENGR 102emptyempty
+not standardENGR 102Engineering Lab I -
+Computation empty
+titlecol: Engineering Lab I -
+Computation  codecol: ENGR 102 hourscol: 2
+not standardMATH 151emptyempty
+not standardMATH 151Engineering
+Mathematics I empty
+titlecol: Engineering
+Mathematics I  codecol: MATH 151 hourscol: 4
+not standardemptyemptyempty
+not standardemptyempty3
+semester hours
+season
+not standardENGR 216/PHYS&nbsp;216emptyempty
+not standardENGR 216/PHYS&nbsp;216Experimental Physics
+and Engineering Lab II - Mechanics empty
+titlecol: Experimental Physics
+and Engineering Lab II - Mechanics  codecol: ENGR 216/PHYS&nbsp;216 hourscol: 2
+not standardMATH 152emptyempty
+not standardMATH 152Engineering
+Mathematics II empty
+titlecol: Engineering
+Mathematics II  codecol: MATH 152 hourscol: 4
+not standardPHYS 206emptyempty
+not standardPHYS 206Newtonian Mechanics
+for Engineering and Science empty
+titlecol: Newtonian Mechanics
+for Engineering and Science  codecol: PHYS 206 hourscol: 3
+not standardemptyemptyempty
+not standardemptyempty3
+not standardemptyemptyempty
+not standardemptyempty3-4
+not standardemptyemptyempty
+not standardemptyFundamentals of
+Chemistry II empty
+not standardemptyFundamentals of
+Chemistry II 
+not standardemptyemptyempty
+not standardemptyempty
+semester hours
+total hours

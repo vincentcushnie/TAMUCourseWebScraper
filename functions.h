@@ -19,6 +19,7 @@ class Functions {
         static void courseInformationProcess(std::string coursesUrl, std::vector<std::string>& data);
         static void prerequisiteProcess(std::ofstream& prereqTable, std::string row, std::string currentCourse);
         static void crossListingProcess(std::ofstream& crossListingTable, std::string row, std::string currentCourse);
+        static void removeNewlines(std::string& input);
     };
 
 

@@ -1,0 +1,96 @@
+Major Code, Course Code, Group, Time Code
+year
+season
+major,ENGL 104,Composition and Rhetoric,1,timecode
+major,ENGL 103,or Introduction to Rhetoric and Composition,1,timecode
+major,MATH 171,Calculus I,2,timecode
+major,University Core Curriculum,,3,timecode
+major,Freshman Science elective,,4,timecode
+major,General elective,,5,timecode
+semester hours
+season
+major,ECON 202,Principles of Economics,6,timecode
+major,ECON 203,or Principles of Economics,6,timecode
+major,MATH 172,Calculus II,7,timecode
+major,University Core Curriculum,,8,timecode
+major,Freshman Science elective,,9,timecode
+major,General elective,,10,timecode
+semester hours
+year
+season
+major,MATH 221,Several Variable Calculus,11,timecode
+major,MATH 300,Foundations of Mathematics,12,timecode
+major,STAT 211,Principles of Statistics I,13,timecode
+major,Select one of the following:,,14,timecode
+major,,Programming I,14,timecode
+major,CSCE 110,,14,timecode
+major,,Introduction to Computer Science Concepts and Programming,14,timecode
+major,CSCE 111,,14,timecode
+major,,Structured Programming in C,14,timecode
+major,CSCE 206,,14,timecode
+semester hours
+season
+major,CSCE 120,Program Design and Concepts,15,timecode
+major,MATH 308,Differential Equations,16,timecode
+major,MATH 323,Linear Algebra,17,timecode
+major,STAT 212,Principles of Statistics II,18,timecode
+major,University Core Curriculum,,19,timecode
+semester hours
+year
+season
+major,CSCE 221,Data Structures and Algorithms,20,timecode
+major,MATH 409,Analysis on the Real Line,21,timecode
+major,PHYS 206,Newtonian Mechanics for Engineering and Science,22,timecode
+major,Select 3 hours from the following:,,23,timecode
+major,,The Mathematics of Interest,23,timecode
+major,MATH 325,,23,timecode
+major,MATH 407-499,,23,timecode
+semester hours
+season
+major,CSCE 314,Programming Languages,24,timecode
+major,MATH 437,Principles of Numerical Analysis,25,timecode
+major,Select 3 hours from the following:,,26,timecode
+major,,The Mathematics of Interest,26,timecode
+major,MATH 325,,26,timecode
+major,MATH 407-499,,26,timecode
+major,Select one of the following:,,27,timecode
+major,,Mathematical Modeling of Ocean Climate,27,timecode
+major,OCNG 451,,27,timecode
+major,PHYS 227,Electricity and Magnetism for Engineering and Science,27,timecode
+semester hours
+year
+season
+major,CSCE 411,Design and Analysis of Algorithms,28,timecode
+major,MATH 415,Modern Algebra I,29,timecode
+major,MATH 433,or Applied Algebra,29,timecode
+major,Select 3 hours from the following:,,30,timecode
+major,,The Mathematics of Interest,30,timecode
+major,MATH 325,,30,timecode
+major,MATH 407-499,,30,timecode
+major,Select one of the following:,,31,timecode
+major,,Public Speaking,31,timecode
+major,COMM 203,,31,timecode
+major,,Communication for Technical Professions,31,timecode
+major,COMM 205,,31,timecode
+major,,Argumentation and Debate,31,timecode
+major,COMM 243,,31,timecode
+major,University Core Curriculum,,32,timecode
+major,General Elective,,33,timecode
+semester hours
+season
+major,CSCE 433,Formal Languages and Automata,34,timecode
+major,Select 3 hours from the following:,,35,timecode
+major,CSCE 210-470,,35,timecode
+major,,Operations Research I,35,timecode
+major,ISEN 320,,35,timecode
+major,,Operations Research II,35,timecode
+major,ISEN 340,,35,timecode
+major,,The Mathematics of Interest,35,timecode
+major,MATH 325,,35,timecode
+major,MATH 407-499,,35,timecode
+major,STAT 335-482,,35,timecode
+major,University Core Curriculum,,36,timecode
+major,University Core Curriculum,,37,timecode
+major,General elective,,38,timecode
+semester hours
+total hours
