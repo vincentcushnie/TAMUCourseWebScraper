@@ -38,15 +38,15 @@ int main() {
 
     std::string majorTable = "majorTable.csv";
     std::ofstream majorFile(majorTable);
-    majorFile<<"majorID, majorName, majorCode, department, credits, difficulty, rules"<<std::endl;
+    majorFile<<"majorName,majorCode,department,credits,difficulty,rules"<<std::endl;
     majorFile.close();
     std::string majorToCoursesTable = "majorToCoursesTable.csv";
     std::ofstream majorToCoursesFile(majorToCoursesTable);
-    majorToCoursesFile<<"Major Code, Course Code, Group, Time Code, Superscript Rules"<<std::endl;
+    majorToCoursesFile<<"majorCode,courseCode,group,timeCode,rules,hours"<<std::endl;
     majorToCoursesFile.close();
     std::string coursesTable = "coursesTable.csv";
     std::ofstream coursesFile(coursesTable);
-    coursesFile<<"Course Code, Course Name, Field, Credits, Lecture, Lab, Description, Difficulty"<<std::endl;
+    coursesFile<<"courseCode,courseName,field,credits,lecture,lab,description,difficulty"<<std::endl;
     coursesFile.close();
     std::string coursesCrossListingTable = "coursesCrossListingTable.csv";
     std::ofstream coursesCrossListingFile(coursesCrossListingTable);
@@ -62,16 +62,23 @@ int main() {
     std::vector <std::string> majors;
     std::vector <std::string> courses;
     majors.push_back("https://catalog.tamu.edu/undergraduate/arts-and-sciences/mathematics/applied-mathematics-bs-computational-science-emphasis/#programrequirementstext");
-    majors.push_back("https://catalog.tamu.edu/undergraduate/engineering/computer-science/computer-engineering-bs/#programrequirementstext");
-    majors.push_back("https://catalog.tamu.edu/undergraduate/performance-visualization-fine-arts/visualization-bs/#programrequirementstext");
-    majors.push_back("https://catalog.tamu.edu/undergraduate/public-health/bs-internship-track/#programrequirementstext");
-    majors.push_back("https://catalog.tamu.edu/undergraduate/agriculture-life-sciences/agricultural-economics/agribusiness-bs/#programrequirementstext");
-    majors.push_back("https://catalog.tamu.edu/undergraduate/engineering/petroleum/bs/#programrequirementstext");
+    // majors.push_back("https://catalog.tamu.edu/undergraduate/engineering/computer-science/computer-engineering-bs/#programrequirementstext");
+    // majors.push_back("https://catalog.tamu.edu/undergraduate/performance-visualization-fine-arts/visualization-bs/#programrequirementstext");
+    // majors.push_back("https://catalog.tamu.edu/undergraduate/public-health/bs-internship-track/#programrequirementstext");
+    // majors.push_back("https://catalog.tamu.edu/undergraduate/agriculture-life-sciences/agricultural-economics/agribusiness-bs/#programrequirementstext");
+    // majors.push_back("https://catalog.tamu.edu/undergraduate/engineering/petroleum/bs/#programrequirementstext");
     
-    courses.push_back("https://catalog.tamu.edu/undergraduate/course-descriptions/math/");
-    courses.push_back("https://catalog.tamu.edu/undergraduate/engineering/computer-science/#coursestext");
-    courses.push_back("https://catalog.tamu.edu/undergraduate/agriculture-life-sciences/poultry-science/#coursestext");
-    courses.push_back("https://catalog.tamu.edu/undergraduate/business/finance/#coursestext");
+    courses.push_back("https://catalog.tamu.edu/undergraduate/course-descriptions/math/");//math
+    courses.push_back("https://catalog.tamu.edu/undergraduate/course-descriptions/engl/");//english
+    courses.push_back("https://catalog.tamu.edu/undergraduate/course-descriptions/econ/");//economics
+    courses.push_back("https://catalog.tamu.edu/undergraduate/course-descriptions/stat/");//statistics
+    courses.push_back("https://catalog.tamu.edu/undergraduate/engineering/computer-science/#coursestext"); //computer science
+    courses.push_back("https://catalog.tamu.edu/undergraduate/course-descriptions/comm/"); //communications
+    courses.push_back("https://catalog.tamu.edu/undergraduate/course-descriptions/ocng/"); //oceanography
+    courses.push_back("https://catalog.tamu.edu/undergraduate/course-descriptions/phys/"); //physics
+    courses.push_back("https://catalog.tamu.edu/undergraduate/course-descriptions/isen/"); //physics
+    // courses.push_back("https://catalog.tamu.edu/undergraduate/agriculture-life-sciences/poultry-science/#coursestext");
+    // courses.push_back("https://catalog.tamu.edu/undergraduate/business/finance/#coursestext");
 
     for(int i=0; i<majors.size(); ++i){
         ScrapeDegree(majors[i], i+1);

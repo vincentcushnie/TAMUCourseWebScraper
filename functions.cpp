@@ -163,7 +163,7 @@ void Functions::courseInformationProcess(std::string coursesUrl, std::vector<std
            }
         }
         else if(isdigit(row[4]) && isdigit(row[5]) && isdigit(row[6])){
-            courseTable<<row.substr(0,7)<<","<<row.substr(8)<<","<<row.substr(0,4)<<",";
+            courseTable<<"\""<<row.substr(0,7)<<"\",\""<<row.substr(8)<<"\",\""<<row.substr(0,4)<<"\",";
             currentCourse=row.substr(0,7);
         }
         else if(row.substr(0,6)=="Credit"){
@@ -186,7 +186,7 @@ void Functions::courseInformationProcess(std::string coursesUrl, std::vector<std
             }
         }
         else if(row.length()>3){
-            courseTable<<row.substr(1)<<","<<0<<std::endl;
+            courseTable<<"\""<<row.substr(1)<<"\","<<0<<std::endl;
         }
     }
     courseTable.close();
@@ -319,7 +319,7 @@ void Functions::degreeInformationProcessAndScrape(pugi::xml_document& doc, int i
     std::string department=Functions::getDepartmentFromUrl(degreeUrl);
     int credits=0;
     int difficulty=0;
-    std::string majorRules="[";
+    std::string majorRules="";
     for(pugi::xml_node node_1 : doc.child("html").child("body").child("section").child("div").children("div")){
         if (std::string(node_1.attribute("id").value())=="col-content"){
             for(pugi::xml_node node_2 : node_1.child("main").children("div")){
@@ -332,7 +332,7 @@ void Functions::degreeInformationProcessAndScrape(pugi::xml_document& doc, int i
         }
     }
     std::ofstream majorFile("majorTable.csv", std::ios::app);
-    majorFile<<std::to_string(majorID)<<","<< majorName <<","<< majorCode<<","<<department<<","<<std::to_string(credits)<<","<<std::to_string(difficulty)<<majorRules<<std::endl;
+    majorFile<< "\""<<majorName <<"\",\""<< majorCode<<"\",\""<<department<<"\","<<std::to_string(credits)<<","<<std::to_string(difficulty)<<",\""<<majorRules<<"\""<<std::endl;
     majorFile.close();
     std::ofstream courseFile("majorToCoursesTable.csv", std::ios::app);
     for(std::string row: data){
@@ -355,8 +355,6 @@ void Functions::processMajorRules(pugi::xml_node& node_2, std::string& majorRule
         majorRules+=majorRule;
         majorRules+=",";
     }
-    majorRules[majorRules.length()-1]=']';
-    if(majorRules=="]") majorRules="";
 }
 
 void Functions::processCourseSuperscripts(pugi::xml_node& node_2, std::vector<std::string>& courseSuperscripts){
@@ -478,6 +476,10 @@ void Functions::processCourseRow(pugi::xml_node& node_4, int& year, int& season,
             titlecol2=bb;
         }
     }
+    if(codecol=="" && codecol2!=""){
+        codecol=codecol2;
+        codecol2="";
+    }
     hourscol=hours;
     Functions::removeNewlines(titlecol);
     Functions::removeNewlines(titlecol2);
@@ -496,8 +498,11 @@ void Functions::processCourseRow(pugi::xml_node& node_4, int& year, int& season,
         std::cout<<"rules: "<<std::endl;
         rules2+=courseSuperscripts[stoi(token2)-1];
     }
-    data.push_back(std::to_string(majorID)+","+codecol+","+titlecol+","+std::to_string(group)+","+std::to_string(year*10+season)+",["+rules+"]");
+    if(codecol.find("from the following")==std::string::npos && codecol.find("of the following") && codecol2.find("from the following")==std::string::npos && codecol2.find("of the following")){
+        data.push_back(std::to_string(majorID)+",\""+codecol+"\",\""+titlecol+"\","+std::to_string(group)+","+std::to_string(year*10+season)+",\""+rules+"\","+std::to_string(hours));
     if(codecol2!=""){
-        data.push_back(std::to_string(majorID)+","+codecol2+","+titlecol2+","+std::to_string(group)+","+std::to_string(year*10+season)+",["+superscriptsSecond+"]");
+        data.push_back(std::to_string(majorID)+",\""+codecol2+"\",\""+titlecol2+"\","+std::to_string(group)+","+std::to_string(year*10+season)+",\""+rules2+"\","+std::to_string(hours));
     }
+    }
+    
 }
