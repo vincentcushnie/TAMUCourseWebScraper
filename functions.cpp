@@ -246,16 +246,16 @@ void Functions::prerequisiteProcess(std::ofstream& prereqTable, std::string row,
                     std::string course = Functions::extract_code(b);
                     if(course!=""){
                         if(b.find("concurrent enrollment")!=std::string::npos){
-                            prereqTable<<currentCourse<<","<<course<<","<<gradeReq<<","<<group<<","<<","<<"True"<<std::endl;
+                            prereqTable<<"\""<<currentCourse<<"\",\""<<course<<"\",\""<<gradeReq<<"\",\""<<group<<"\",\""<<"\",\""<<"True"<<"\""<<std::endl;
                         }else{
-                            prereqTable<<currentCourse<<","<<course<<","<<gradeReq<<","<<group<<","<<","<<"False"<<std::endl;
+                            prereqTable<<"\""<<currentCourse<<"\",\""<<course<<"\",\""<<gradeReq<<"\",\""<<group<<"\",\""<<"\",\""<<"False"<<"\""<<std::endl;
                         }
                         
                     }else{
                         if(b.find("concurrent enrollment")!=std::string::npos){
-                            prereqTable<<currentCourse<<","<<","<<","<<group<<","<<"concurrent enrollment"<<","<<"N/A"<<std::endl;
+                            prereqTable<<"\""<<currentCourse<<"\",\""<<"\",\""<<"\",\""<<group<<"\",\""<<"concurrent enrollment"<<"\",\""<<"N/A\""<<std::endl;
                         }else{
-                            prereqTable<<currentCourse<<","<<","<<","<<group<<","<<b<<","<<"N/A"<<std::endl;
+                            prereqTable<<"\""<<currentCourse<<"\",\""<<"\",\""<<"\",\""<<group<<"\",\""<<b<<"\",\""<<"N/A\""<<std::endl;
                         }           
                     }
                 }
@@ -308,7 +308,7 @@ void Functions::replaceNbsp(std::string& text, std::string repl) {
 
 
 
-void Functions::degreeInformationProcessAndScrape(pugi::xml_document& doc, int id, std::string degreeUrl){
+void Functions::degreeInformationProcessAndScrape(pugi::xml_document& doc, int id, std::string degreeUrl, int &group){
     std::vector<std::string> data;
     std::vector<std::string> courseSuperscripts;
     int majorID=id;
@@ -326,7 +326,7 @@ void Functions::degreeInformationProcessAndScrape(pugi::xml_document& doc, int i
                 if(std::string(node_2.attribute("id").value())=="programrequirementstextcontainer"){
                     Functions::processMajorRules(node_2, majorRules);
                     Functions::processCourseSuperscripts(node_2, courseSuperscripts);
-                    Functions::processCourseTables(node_2, courseSuperscripts, data, id, credits);
+                    Functions::processCourseTables(node_2, courseSuperscripts, data, id, credits, group);
                 }
             }
         }
@@ -370,12 +370,12 @@ void Functions::processCourseSuperscripts(pugi::xml_node& node_2, std::vector<st
     }
 }
 
-void Functions::processCourseTables(pugi::xml_node& node_2, std::vector<std::string>& courseSuperscripts, std::vector<std::string>& data, const int& majorID, int& credits){
+void Functions::processCourseTables(pugi::xml_node& node_2, std::vector<std::string>& courseSuperscripts, std::vector<std::string>& data, const int& majorID, int& credits, int& group){
     int year=0;
     int season=1;
     for(pugi::xml_node node_3: node_2.children("table")){
         if(std::string(node_3.attribute("class").value())=="sc_plangrid"){
-            int group=0;
+            //int group=0;
             int hours;
             for(pugi::xml_node node_4: node_3.children("tr")){
                 std::string nodeClass = std::string(node_4.attribute("class").value());
@@ -437,13 +437,13 @@ void Functions::processCourseRow(pugi::xml_node& node_4, int& year, int& season,
                 }
                 d=node_5.child("span").child("a").text().get();
                 e=node_5.child("span").text().get();
-                superscripts=node_5.child("sup").text().get();
+                superscripts+=node_5.child("sup").text().get();
         }
         if(std::string(node_5.attribute("class").value())=="titlecol"){
             aa=node_5.text().get();
             bb=node_5.child("div").text().get();
             if(superscripts==""){
-                superscripts=node_5.child("sup").text().get();
+                superscripts+=node_5.child("sup").text().get();
             }
         }
         if(std::string(node_5.attribute("class").value())=="hourscol"){
@@ -498,7 +498,7 @@ void Functions::processCourseRow(pugi::xml_node& node_4, int& year, int& season,
         std::cout<<"rules: "<<std::endl;
         rules2+=courseSuperscripts[stoi(token2)-1];
     }
-    if(codecol.find("from the following")==std::string::npos && codecol.find("of the following") && codecol2.find("from the following")==std::string::npos && codecol2.find("of the following")){
+    if(codecol.find("from the following")==std::string::npos && codecol.find("of the following")==std::string::npos && codecol2.find("from the following")==std::string::npos && codecol2.find("of the following")){
         data.push_back(std::to_string(majorID)+",\""+codecol+"\",\""+titlecol+"\","+std::to_string(group)+","+std::to_string(year*10+season)+",\""+rules+"\","+std::to_string(hours));
     if(codecol2!=""){
         data.push_back(std::to_string(majorID)+",\""+codecol2+"\",\""+titlecol2+"\","+std::to_string(group)+","+std::to_string(year*10+season)+",\""+rules2+"\","+std::to_string(hours));
